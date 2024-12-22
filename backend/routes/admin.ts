@@ -1,6 +1,5 @@
-import { readFileSync, existsSync } from "fs";
+import {existsSync, readFileSync} from "fs";
 
-// Check if the secret file exists and read it, otherwise fallback
 const SECRET_PATH = "/run/secrets/admin_password";
 const ADMIN_PASSWORD = existsSync(SECRET_PATH)
     ? readFileSync(SECRET_PATH, "utf-8").trim()

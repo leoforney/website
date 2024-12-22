@@ -1,4 +1,4 @@
-import { createTopic, getTopicById, getAllTopics } from "../controllers/topicsController";
+import {createTopic, getAllTopics, getTopicById} from "../controllers/topicsController";
 import adminRoute from "./admin.ts";
 
 export default async function topicsRoute(req: Request, pool: any) {

@@ -63,7 +63,13 @@ export const createProject = async (project) => {
 };
 
 export const updateProject = async (project) => {
-    alert("Stub")
+    const password = checkPassword();
+    console.log(project)
+    await fetch(`${BASE_URL}/projects?password=${password}&id=${project.project_id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(project),
+    });
 }
 
 export const saveTopics = async (projectId, topicIds) => {

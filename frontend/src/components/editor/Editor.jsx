@@ -1,20 +1,17 @@
 import {useLexicalComposerContext} from "@lexical/react/LexicalComposerContext";
 import {RichTextPlugin} from "@lexical/react/LexicalRichTextPlugin";
-import ToolbarPlugin from "./ToolbarPlugin.tsx";
+import ToolbarPlugin from "../admin/ToolbarPlugin.tsx";
 import {ContentEditable} from "@lexical/react/LexicalContentEditable";
 import {TabIndentationPlugin} from "@lexical/react/LexicalTabIndentationPlugin";
 import {HistoryPlugin} from "@lexical/react/LexicalHistoryPlugin";
 import {AutoFocusPlugin} from "@lexical/react/LexicalAutoFocusPlugin";
 import {LexicalErrorBoundary} from "@lexical/react/LexicalErrorBoundary";
 import {LexicalComposer} from "@lexical/react/LexicalComposer";
-import {useEffect, useState} from "react";
+import {useEffect, useRef} from "react";
 import Box from "@mui/material/Box";
-
-const exampleTheme = {
-    ltr: 'ltr',
-    rtl: 'rtl',
-    paragraph: 'editor-paragraph',
-};
+import './Editor.css';
+import {$getRoot} from "lexical";
+import EditorTheme from "./EditorTheme.js";
 
 function onError(error) {
     console.error(error);
@@ -22,37 +19,44 @@ function onError(error) {
 
 function MyOnChangePlugin({ onChange }) {
     const [editor] = useLexicalComposerContext();
+    const editorStateRef = useRef({});
+
     useEffect(() => {
-        return editor.registerUpdateListener(({editorState}) => {
+        return editor.registerUpdateListener(({ editorState }) => {
+            editorStateRef.current = editorState;
             onChange(editorState);
         });
     }, [editor, onChange]);
+
     return null;
 }
 
-function RestoreEditorStatePlugin({ editorState }) {
+function RestoreEditorStatePlugin({ editorState: initialEditorState }) {
     const [editor] = useLexicalComposerContext();
+    const editorStateRef = useRef(initialEditorState);
 
     useEffect(() => {
-        if (editorState) {
+        if (initialEditorState) {
             editor.update(() => {
-                const newState = editor.parseEditorState(editorState);
+                const newState = editor.parseEditorState(initialEditorState);
                 editor.setEditorState(newState);
+                editorStateRef.current = newState;
+            });
+        } else {
+            editor.update(() => {
+                const root = $getRoot();
+                root.clear();
             });
         }
-    }, [editor, editorState]);
+    }, [editor, initialEditorState]);
 
     return null;
 }
-
 export function Editor({ editorState, setEditorState }) {
     const initialConfig = {
         namespace: 'MyEditor',
-        theme: exampleTheme,
+        theme: EditorTheme,
         onError,
-        editorState: editorState
-            ? () => editorState
-            : () => undefined,
     };
 
     function onChange(editorState) {
@@ -85,12 +89,11 @@ export function Editor({ editorState, setEditorState }) {
                             <ContentEditable
                                 className="editor-input"
                                 aria-placeholder={""}
-                                placeholder={
-                                    <div className="editor-placeholder">{""}</div>
-                                }
+                                placeholder={""}
                             />
                         }
                         ErrorBoundary={LexicalErrorBoundary}
+                        initialEditorState={editorState}
                     />
                 </Box>
                 <TabIndentationPlugin />

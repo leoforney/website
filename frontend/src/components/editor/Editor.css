@@ -1,0 +1,203 @@
+/* Directionality */
+.ltr {
+    direction: ltr;
+}
+
+.rtl {
+    direction: rtl;
+}
+
+/* Paragraph and Quote */
+.editor-paragraph {
+    margin: 1em 0;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.editor-quote {
+    font-style: italic;
+    border-left: 4px solid #ccc;
+    padding-left: 16px;
+    margin: 1em 0;
+    color: #555;
+}
+
+/* Headings */
+.editor-heading-h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 1.5em 0;
+}
+
+.editor-heading-h2 {
+    font-size: 1.75rem;
+    font-weight: bold;
+    margin: 1.4em 0;
+}
+
+.editor-heading-h3 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 1.2em 0;
+}
+
+.editor-heading-h4 {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin: 1em 0;
+}
+
+.editor-heading-h5 {
+    font-size: 1rem;
+    font-weight: bold;
+    margin: 0.8em 0;
+}
+
+.editor-heading-h6 {
+    font-size: 0.875rem;
+    font-weight: bold;
+    margin: 0.6em 0;
+}
+
+/* Lists */
+.editor-list-ol {
+    list-style-type: decimal;
+    padding-left: 40px;
+}
+
+.editor-list-ul {
+    list-style-type: disc;
+    padding-left: 40px;
+}
+
+.editor-listItem {
+    margin-bottom: 0.5em;
+}
+
+.editor-nested-listitem {
+    padding-left: 20px;
+}
+
+.editor-listItemChecked {
+    text-decoration: line-through;
+    color: #888;
+}
+
+.editor-listItemUnchecked {
+    color: inherit;
+}
+
+/* Inline Text Styles */
+.editor-textBold {
+    font-weight: bold;
+}
+
+.editor-textCode {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #272822;
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+}
+
+.editor-textItalic {
+    font-style: italic;
+}
+
+.editor-textStrikethrough {
+    text-decoration: line-through;
+}
+
+.editor-textSubscript {
+    font-size: 0.8em;
+    vertical-align: sub;
+}
+
+.editor-textSuperscript {
+    font-size: 0.8em;
+    vertical-align: super;
+}
+
+.editor-textUnderline {
+    text-decoration: underline;
+}
+
+.editor-textUnderlineStrikethrough {
+    text-decoration: underline line-through;
+}
+
+/* Links */
+.editor-link {
+    color: #1e88e5;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.editor-link:hover {
+    color: #1565c0;
+}
+
+/* Hashtag */
+.editor-hashtag {
+    color: #ff5722;
+    font-weight: bold;
+}
+
+/* Images */
+.editor-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 1em auto;
+}
+
+/* Code Blocks */
+.editor-code {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #272822;
+    color: #f8f8f2;
+    padding: 1em;
+    border-radius: 6px;
+    overflow-x: auto;
+}
+
+/* Code Highlights */
+.editor-tokenAttr {
+    color: #a6e22e;
+}
+
+.editor-tokenProperty {
+    color: #f92672;
+}
+
+.editor-tokenSelector {
+    color: #66d9ef;
+}
+
+.editor-tokenComment {
+    color: #75715e;
+    font-style: italic;
+}
+
+.editor-tokenFunction {
+    color: #a6e22e;
+}
+
+.editor-tokenVariable {
+    color: #9effff;
+}
+
+.editor-tokenOperator {
+    color: #f8f8f2;
+}
+
+.editor-tokenPunctuation {
+    color: #f8f8f2;
+}
+
+/* Add additional token styling as needed */
+
+/* Miscellaneous */
+.editor-tokenSelector,
+.editor-tokenString {
+    color: #e6db74;
+}

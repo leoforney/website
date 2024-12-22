@@ -1,38 +1,16 @@
 import './App.css';
 import React from 'react';
 import DrawerAppBar from "./DrawerAppBar.jsx";
-import ContactPage from "./ContactPage.jsx";
 import {Container, createTheme, Fab, Fade, ThemeProvider, useScrollTrigger} from "@mui/material";
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
+import router from './config/Router.jsx';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import {RouterProvider,} from "react-router-dom";
 
-import {
-    createBrowserRouter,
-    createRoutesFromElements,
-    Route,
-    RouterProvider,
-} from "react-router-dom";
-import ErrorPage from "./NotFoundPage.jsx";
-import AboutPage from "./AboutPage.jsx";
-import ProjectDetailsPage from "./pages/ProjectDetailsPage.jsx";
-import PostPage from "./pages/PostPage.jsx";
-import ProjectsPage from "./pages/ProjectsPage.jsx";
-import Admin from "./components/admin/Admin.jsx";
-
-const router = createBrowserRouter(
-    createRoutesFromElements(
-        <Route path="/" errorElement={<ErrorPage />}>
-            <Route path="" element={<AboutPage/>}/>
-            <Route path="about" element={<AboutPage />}/>
-            <Route path="/projects" element={<ProjectsPage />} />
-            <Route path="/projects/:id" element={<ProjectDetailsPage />} />
-            <Route path="/posts/:id" element={<PostPage />} />
-            <Route path="contact" element={<ContactPage/>}/>
-            <Route path="admin" element={<Admin/>}/>
-        </Route>
-    )
-);
+dayjs.extend(utc)
 
 const theme = createTheme({
     palette: {
@@ -50,15 +28,58 @@ const theme = createTheme({
     components: {
         MuiCssBaseline: {
         }
-    }
+    },
 });
 
+theme.typography.h1 = {
+    fontSize: '2.5rem',
+    fontWeight: 'bold',
+    '@media (min-width:600px)': {
+        fontWeight: 'bold',
+        fontSize: '4rem',
+    },
+    [theme.breakpoints.up('md')]: {
+        fontWeight: 'normal',
+        fontSize: '6rem',
+    },
+};
+
+theme.typography.h2 = {
+    fontSize: '2rem',
+    fontWeight: 'bold',
+    '@media (min-width:600px)': {
+        fontSize: '2.25rem',
+    },
+    [theme.breakpoints.up('md')]: {
+        fontWeight: 'normal',
+        fontSize: '2.65rem',
+    },
+};
+
+
+theme.typography.h3 = {
+    fontSize: '1.5rem',
+    '@media (min-width:600px)': {
+        fontSize: '1.75rem',
+    },
+    [theme.breakpoints.up('md')]: {
+        fontSize: '2.25rem',
+    },
+};
+
+theme.typography.h4 = {
+    fontSize: '1.25rem',
+    fontWeight: 'normal',
+    '@media (min-width:600px)': {
+        fontSize: '1.5rem',
+    },
+    [theme.breakpoints.up('md')]: {
+        fontSize: '2rem',
+    },
+};
 
 function ElevationScroll(props) {
     const { children, window } = props;
-    // Note that you normally won't need to set the window ref as useScrollTrigger
-    // will default to window.
-    // This is only being set here because the demo is in an iframe.
     const trigger = useScrollTrigger({
         disableHysteresis: true,
         threshold: 0,
@@ -72,18 +93,11 @@ function ElevationScroll(props) {
 
 ElevationScroll.propTypes = {
     children: PropTypes.element.isRequired,
-    /**
-     * Injected by the documentation to work in an iframe.
-     * You won't need it on your project.
-     */
     window: PropTypes.func,
 };
 
 function ScrollTop(props) {
     const { children, window } = props;
-    // Note that you normally won't need to set the window ref as useScrollTrigger
-    // will default to window.
-    // This is only being set here because the demo is in an iframe.
     const trigger = useScrollTrigger({
         target: window ? window() : undefined,
         disableHysteresis: true,
@@ -117,10 +131,6 @@ function ScrollTop(props) {
 
 ScrollTop.propTypes = {
     children: PropTypes.element.isRequired,
-    /**
-     * Injected by the documentation to work in an iframe.
-     * You won't need it on your project.
-     */
     window: PropTypes.func,
 };
 
@@ -128,9 +138,6 @@ class App extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            markdown: ""
-        }
     }
 
     render() {

@@ -16,6 +16,7 @@ services:
       DB_PORT: 5432
     secrets:
       - admin_password
+      - gemini_key
 
   postgres:
     image: postgres:latest
@@ -36,6 +37,8 @@ services:
 secrets:
   admin_password:
     file: /home/leo/admin_password.txt
+  gemini_key:
+    file: /home/leo/gemini_key.txt
 
 volumes:
   postgres_data:

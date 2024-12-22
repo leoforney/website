@@ -15,3 +15,33 @@ export async function insertProject(pool: any, { name, topic_id, description }: 
     );
     return result.rows[0];
 }
+
+export async function updateProjectSummary(pool: any, id: number, summary: string) {
+    const result = await pool.query(
+        `
+        UPDATE projects
+        SET 
+            summary = $1
+        WHERE id = $2
+        RETURNING *;
+        `,
+        [summary, id]
+    );
+    return result.rows[0];
+}
+
+export async function updateProject(pool: any, id: number, { name, topic_id, description }: any) {
+    const result = await pool.query(
+        `
+        UPDATE projects
+        SET 
+            name = COALESCE($1, name), 
+            topic_id = $2, 
+            description = COALESCE($3, description)
+        WHERE id = $4
+        RETURNING *;
+        `,
+        [name, topic_id, description, id]
+    );
+    return result.rows[0];
+}

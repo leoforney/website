@@ -1,17 +1,16 @@
-// Import necessary libraries
-import React, { useState } from "react";
+import React, {useState} from "react";
 import {
     Box,
     Button,
+    Chip,
     Dialog,
     DialogActions,
     DialogContent,
     DialogTitle,
     TextField,
-    Chip,
     Typography
 } from "@mui/material";
-import { createProject, updateProject } from "../../api.js";
+import {createProject, updateProject} from "../../api.js";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import List from "@mui/material/List";
@@ -21,7 +20,7 @@ const ProjectModal = ({
                           onClose,
                           onSave,
                           topics,
-                          project = null, // Null for new project, populated for editing
+                          project = null,
                       }) => {
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
@@ -49,15 +48,13 @@ const ProjectModal = ({
 
         try {
             if (project) {
-                // Update existing project
                 await updateProject(projectData);
             } else {
-                // Create new project
                 await createProject(projectData);
             }
 
-            onSave(); // Callback to refresh the project list
-            onClose(); // Close the modal
+            onSave();
+            onClose();
         } catch (error) {
             console.error("Error saving project:", error);
         }
@@ -121,22 +118,22 @@ const AdminProjectsList = ({ projects, selectedProject, onProjectSelect, onAddPr
     const [editingProject, setEditingProject] = useState(null);
 
     const handleAddProject = () => {
-        setEditingProject(null); // Clear editing state
+        setEditingProject(null);
         setModalOpen(true);
     };
 
     const handleEditProject = (project) => {
-        setEditingProject(project); // Populate modal with project details
+        setEditingProject(project);
         setModalOpen(true);
     };
 
     const handleSave = async () => {
         try {
-            await onAddProject(); // Refresh the projects list
+            await onAddProject();
         } catch (error) {
             console.error("Error refreshing project list:", error);
         } finally {
-            setModalOpen(false); // Ensure modal only closes once
+            setModalOpen(false);
         }
     };
 

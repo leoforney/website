@@ -1,5 +1,4 @@
-import { insertPost, fetchPostById, fetchAllPosts, updatePostById, fetchPostsByProjectId } from "../models/postModel";
-import { convertDraftToHtml } from "../utils/convertEditorData";
+import {fetchAllPosts, fetchPostById, fetchPostsByProjectId, insertPost, updatePostById} from "../models/postModel";
 
 export async function getPostById(pool: any, id: number) {
     return await fetchPostById(pool, id);
@@ -14,21 +13,17 @@ export async function getPostsByProjectId(pool: any, projectId: number) {
 }
 
 export async function createPost(pool: any, data: any) {
-    // Suppose `data` looks like { project_id: number, draftContent: JSON, title: string }
-    const content_html = convertDraftToHtml(data.draftContent);
     return await insertPost(pool, {
         project_id: data.project_id,
-        content_html,
+        editor_state: data.editor_state,
         title: data.title,
     });
 }
 
 export async function updatePost(pool: any, id: number, data: any) {
-    // Suppose `data` looks like { project_id: number, draftContent: JSON, title: string }
-    const content_html = convertDraftToHtml(data.draftContent);
     return await updatePostById(pool, id, {
         project_id: data.project_id,
-        content_html: data.content_html,
+        editor_state: data.editor_state,
         title: data.title,
     });
 }

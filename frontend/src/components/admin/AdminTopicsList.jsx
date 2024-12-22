@@ -1,5 +1,5 @@
 import React from "react";
-import {List, ListItem, FormControlLabel, Checkbox, Typography, Button} from "@mui/material";
+import {Button, List, ListItem, Typography} from "@mui/material";
 import ListItemText from "@mui/material/ListItemText";
 import Box from "@mui/material/Box";
 

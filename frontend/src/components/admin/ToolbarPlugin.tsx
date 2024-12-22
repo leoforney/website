@@ -1,7 +1,5 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import {
-    useLexicalComposerContext
-} from '@lexical/react/LexicalComposerContext';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
 import {
     $getSelection,
     $isRangeSelection,
@@ -13,8 +11,8 @@ import {
     SELECTION_CHANGE_COMMAND,
     UNDO_COMMAND
 } from 'lexical';
-import { mergeRegister } from '@lexical/utils';
-import { IconButton, Divider, Toolbar, Tooltip } from '@mui/material';
+import {mergeRegister} from '@lexical/utils';
+import {Divider, IconButton, Toolbar, Tooltip} from '@mui/material';
 import UndoIcon from '@mui/icons-material/Undo';
 import RedoIcon from '@mui/icons-material/Redo';
 import FormatBoldIcon from '@mui/icons-material/FormatBold';
@@ -25,10 +23,9 @@ import FormatAlignLeftIcon from '@mui/icons-material/FormatAlignLeft';
 import FormatAlignCenterIcon from '@mui/icons-material/FormatAlignCenter';
 import FormatAlignRightIcon from '@mui/icons-material/FormatAlignRight';
 import FormatAlignJustifyIcon from '@mui/icons-material/FormatAlignJustify';
+import CodeIcon from '@mui/icons-material/Code';
 
 const LowPriority = 1;
-
-import CodeIcon from '@mui/icons-material/Code'; // Import the Code icon
 
 export default function ToolbarPlugin() {
     const [editor] = useLexicalComposerContext();
@@ -95,16 +92,18 @@ export default function ToolbarPlugin() {
 
     const toggleCodeBlock = () => {
         editor.update(() => {
-            const selection = $getSelection();
-            if ($isRangeSelection(selection)) {
-                const parentNode = selection.anchor.getNode().getParent();
-                if (parentNode && parentNode.getType() === 'code') {
-                    editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'paragraph'); // Toggle back to paragraph
-                } else {
-                    editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'code'); // Switch to code block
-                }
-            }
-        });
+                const selection = $getSelection();
+                if ($isRangeSelection(selection)) {
+                      const parentNode = selection.anchor.getNode().getParent();
+                      if (parentNode && parentNode.getType() === 'code') {
+                            editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'paragraph');
+                            editor.dispatchCommand(FORMAT_TEXT_COMMAND, null);
+                          } else {
+                            editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'code');
+                            editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'code');
+                          }
+                    }
+              });
     };
 
     return (

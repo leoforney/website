@@ -10,8 +10,8 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import EmailIcon from '@mui/icons-material/Email';
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import { getAnalytics, logEvent } from "firebase/analytics";
-import { firebaseApp } from "./WebsiteFirebaseConfig";
+import {getAnalytics, logEvent} from "firebase/analytics";
+import {firebaseApp} from "../WebsiteFirebaseConfig.js";
 
 const analytics = getAnalytics(firebaseApp);
 

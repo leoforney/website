@@ -1,9 +1,10 @@
-import { pool } from "./db";
+import {getPool} from "./db";
 import fs from "fs";
 import path from "path";
 
 export async function migrate() {
     try {
+        const pool = getPool();
         const migrationsDir = path.resolve(__dirname, "migrations");
         const files = fs.readdirSync(migrationsDir).filter(file => file.endsWith(".sql"));
 

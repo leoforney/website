@@ -1,4 +1,4 @@
-import { insertTopic, fetchTopicById, fetchAllTopics } from "../models/topicModel";
+import {fetchAllTopics, fetchTopicById, insertTopic} from "../models/topicModel";
 
 export async function getTopicById(pool: any, id: number) {
     return await fetchTopicById(pool, id);

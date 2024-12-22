@@ -1,18 +1,24 @@
-import { serve } from "bun";
+import {serve} from "bun";
 import router from "./routes/index";
-import { pool } from "./config/db";
-import { migrate } from "./config/migrate";
+import {getPool} from "./config/db";
+import {migrate} from "./config/migrate";
 
 (async () => {
     await migrate();
 
+    // @ts-ignore
     serve({
         port: 3000,
         async fetch(req) {
+            const pool = getPool();
             const res = await router(req, pool);
-            res.headers.set('Access-Control-Allow-Origin', '*');
-            res.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-            return res;
+            if (res) {
+                res.headers.set('Access-Control-Allow-Origin', '*');
+                res.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+                return res;
+            } else {
+                return new Response("Internal Server Error", { status: 500 });
+            }
         },
     });
 

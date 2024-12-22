@@ -22,10 +22,7 @@
     "@mui/icons-material": "^6.2.1",
     "@mui/material": "^6.2.1",
     "@mui/styles": "^6.2.1",
-    "@react-three/drei": "^9.120.4",
-    "@react-three/fiber": "^8.17.10",
     "dayjs": "^1.11.13",
-    "draft-js": "^0.11.7",
     "firebase": "^11.1.0",
     "lexical": "^0.21.0",
     "mui-image-slider": "^1.0.10",
@@ -33,9 +30,7 @@
     "react-dom": "^18.3.1",
     "react-markdown": "^9.0.1",
     "react-router-dom": "^7.0.2",
-    "rehype-raw": "^7.0.0",
-    "three": "^0.171.0",
-    "vcards-js": "^2.10.0"
+    "three": "^0.171.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",

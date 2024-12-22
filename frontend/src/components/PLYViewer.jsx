@@ -1,57 +1,9 @@
-import React, { useRef, useEffect, Suspense, useState } from 'react';
-import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import Typography from "@mui/material/Typography";
-import { Grid, Box, CssBaseline, Button } from "@mui/material";
-import { getAnalytics, logEvent } from "firebase/analytics";
-import { firebaseApp } from "./WebsiteFirebaseConfig";
+import React, {useEffect, useRef, useState} from "react";
+import * as THREE from "three";
 import {MathUtils} from "three";
+import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 
-const analytics = getAnalytics(firebaseApp);
-
-class AboutPage extends React.Component {
-    componentDidMount() {
-        logEvent(analytics, 'page_opened', {
-            name: "About"
-        });
-    }
-
-    render() {
-        return (
-            <Box>
-                <Grid container sx={{ display: "flex", flexDirection: "row" }}>
-                    <CssBaseline />
-                    <Grid item xs={12} md={4} sx={{
-                        height: "100%", width: "100%",
-                        borderRadius: "10px",
-                        aspectRatio: "1 / 1",
-                        position: "relative"
-                    }}>
-                        <Suspense fallback={<SkeletonViewer />}>
-                            <PLYViewer />
-                        </Suspense>
-                    </Grid>
-                    <Grid item xs={12} md={8} sx={{ pl: 5, pr: 5 }}>
-                        <Typography variant={"h1"} className={"flashingText"}>
-                            Hi I'm Leo
-                        </Typography>
-                        <Typography variant={"h4"}>
-                            I'm a software engineer based out of Chicago who's extremely passionate about devising
-                            software that helps people.
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={12} sx={{ height: "100%", width: "100%", mt: 5, mb: 10 }}>
-                        <Button variant={"contained"} sx={{ height: "100%", width: "100%" }} href={"/projects"}>
-                            Check out my work
-                        </Button>
-                    </Grid>
-                </Grid>
-            </Box>
-        );
-    }
-}
-
-function PLYViewer() {
+export function PLYViewer() {
     const mountRef = useRef(null);
     const [modelLoaded, setModelLoaded] = useState(false);
 
@@ -199,7 +151,7 @@ function PLYViewer() {
     );
 }
 
-function SkeletonViewer() {
+export function SkeletonViewer() {
     return (
         <div
             style={{
@@ -217,5 +169,3 @@ function SkeletonViewer() {
         </div>
     );
 }
-
-export default AboutPage;

@@ -1,22 +1,40 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { fetchPostsByProjectId } from '../api';
-import { List, ListItem, ListItemText } from '@mui/material';
-import Box from "@mui/material/Box";
+import React, {useEffect, useState} from 'react';
+import {Link, useParams} from 'react-router-dom';
+import {fetchPostsByProjectId} from '../api';
+import {Box, CircularProgress, List, ListItem, ListItemText} from '@mui/material';
 import {NoEntries} from "./NoEntries.jsx";
+import dayjs from "dayjs";
 
 const ProjectDetails = () => {
     const { id } = useParams();
-    const [posts, setPosts] = useState([]);
+    const [posts, setPosts] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
-            const postsData = await fetchPostsByProjectId(id);
-            setPosts(postsData);
+            try {
+                const postsData = await fetchPostsByProjectId(id);
+                const sortedPosts = postsData.sort((a, b) => {
+                    const dateA = a.updated_at ? new Date(a.updated_at) : new Date(a.created_at);
+                    const dateB = b.updated_at ? new Date(b.updated_at) : new Date(b.created_at);
+                    return dateB - dateA;
+                });
+                setPosts(sortedPosts);
+            } catch (error) {
+                console.error("Failed to fetch posts:", error);
+                setPosts([]);
+            }
         };
 
         fetchData();
     }, [id]);
+
+    if (posts === null) {
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: 10 }}>
+                <CircularProgress />
+            </Box>
+        );
+    }
 
     return (
         <>
@@ -26,11 +44,11 @@ const ProjectDetails = () => {
                 <List>
                     {posts.map((post) => (
                         <ListItem key={post.id}>
-                            <Link to={`/posts/${post.id}`}>
+                            <Link to={`/posts/${post.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                                 <ListItemText
-                                    primary={post.title} // Secondary should be topic in a pill
+                                    primary={post.title}
                                     secondary={`Last updated: ${
-                                        post.updated_at || post.created_at
+                                        dayjs.utc(post.updated_at || post.created_at)?.format('MM/DD/YYYY: h:mm A')
                                     }`}
                                 />
                             </Link>
@@ -39,7 +57,6 @@ const ProjectDetails = () => {
                 </List>
             )}
         </>
-
     );
 };
 

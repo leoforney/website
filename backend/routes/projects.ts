@@ -1,4 +1,4 @@
-import { createProject, getProjectById, getAllProjects } from "../controllers/projectsController";
+import {createProject, getAllProjects, getProjectById, updateProjectFromReq} from "../controllers/projectsController";
 import adminRoute from "./admin.ts";
 
 export default async function projectsRoute(req: Request, pool: any) {
@@ -21,8 +21,20 @@ export default async function projectsRoute(req: Request, pool: any) {
             return deniedResponse;
         }
         const body = await req.json();
-        console.log(body)
         const newProject = await createProject(pool, body);
+        return new Response(JSON.stringify(newProject), { status: 201 });
+    }
+
+    if (req.method === "PATCH") {
+        const deniedResponse = await adminRoute(req, pool);
+        if (deniedResponse) {
+            return deniedResponse;
+        }
+        if (!id) {
+            return new Response("Please add ?id=projectid to url", { status: 400 });
+        }
+        const body = await req.json();
+        const newProject = await updateProjectFromReq(pool, Number.parseInt(id), body);
         return new Response(JSON.stringify(newProject), { status: 201 });
     }
 
