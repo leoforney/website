@@ -1,6 +1,7 @@
 import {createPost, getAllPosts, getPostById, getPostsByProjectId, updatePost} from "../controllers/postsController";
 import adminRoute from "./admin.ts";
 import {summarizeProject} from "../summarization/projectSummary.ts";
+import {generateTopicPdf} from "../summarization/topicSummary.ts";
 
 export default async function postsRoute(req: Request, pool: any) {
     const url = new URL(req.url);
@@ -47,7 +48,9 @@ export default async function postsRoute(req: Request, pool: any) {
         }
 
         if (data.project_id) {
-            summarizeProject(pool, data.project_id);
+            summarizeProject(pool, data.project_id).then((p) => {
+                generateTopicPdf(pool, p.topic_id);
+            })
         }
 
         return response;

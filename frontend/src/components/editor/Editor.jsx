@@ -1,4 +1,6 @@
+import {useEffect, useRef} from "react";
 import {useLexicalComposerContext} from "@lexical/react/LexicalComposerContext";
+import EditorTheme from "./EditorTheme.js";
 import {RichTextPlugin} from "@lexical/react/LexicalRichTextPlugin";
 import ToolbarPlugin from "../admin/ToolbarPlugin.tsx";
 import {ContentEditable} from "@lexical/react/LexicalContentEditable";
@@ -7,61 +9,43 @@ import {HistoryPlugin} from "@lexical/react/LexicalHistoryPlugin";
 import {AutoFocusPlugin} from "@lexical/react/LexicalAutoFocusPlugin";
 import {LexicalErrorBoundary} from "@lexical/react/LexicalErrorBoundary";
 import {LexicalComposer} from "@lexical/react/LexicalComposer";
-import {useEffect, useRef} from "react";
 import Box from "@mui/material/Box";
-import './Editor.css';
-import {$getRoot} from "lexical";
-import EditorTheme from "./EditorTheme.js";
+import "./Editor.css";
 
-function onError(error) {
-    console.error(error);
-}
-
-function MyOnChangePlugin({ onChange }) {
+function MyOnChangePlugin({ editorState, setEditorState }) {
     const [editor] = useLexicalComposerContext();
-    const editorStateRef = useRef({});
+    const isFirstLoad = useRef(true);
 
     useEffect(() => {
-        return editor.registerUpdateListener(({ editorState }) => {
-            editorStateRef.current = editorState;
-            onChange(editorState);
+        const unregisterUpdateListener = editor.registerUpdateListener(({ editorState: newEditorState }) => {
+            setEditorState(newEditorState); // Notify parent of changes
         });
-    }, [editor, onChange]);
 
-    return null;
-}
-
-function RestoreEditorStatePlugin({ editorState: initialEditorState }) {
-    const [editor] = useLexicalComposerContext();
-    const editorStateRef = useRef(initialEditorState);
+        return () => {
+            unregisterUpdateListener();
+        };
+    }, [editor, setEditorState]);
 
     useEffect(() => {
-        if (initialEditorState) {
-            editor.update(() => {
-                const newState = editor.parseEditorState(initialEditorState);
-                editor.setEditorState(newState);
-                editorStateRef.current = newState;
-            });
-        } else {
-            editor.update(() => {
-                const root = $getRoot();
-                root.clear();
-            });
+        if (isFirstLoad.current) {
+            isFirstLoad.current = false;
+            if (editorState) {
+                editor.update(() => {
+                    editor.setEditorState(editor.parseEditorState(editorState));
+                });
+            }
         }
-    }, [editor, initialEditorState]);
+    }, [editor, editorState]);
 
     return null;
 }
+
 export function Editor({ editorState, setEditorState }) {
     const initialConfig = {
-        namespace: 'MyEditor',
+        namespace: "MyEditor",
         theme: EditorTheme,
-        onError,
+        onError: console.error,
     };
-
-    function onChange(editorState) {
-        setEditorState(editorState);
-    }
 
     return (
         <LexicalComposer initialConfig={initialConfig}>
@@ -77,28 +61,35 @@ export function Editor({ editorState, setEditorState }) {
             >
                 <ToolbarPlugin />
                 <Box
-                    className="editor-inner"
-                    sx={{
-                        flexGrow: 1,
-                        overflowY: "auto",
-                        padding: "8px",
-                    }}
+                    className="editor-inner editor-shell"
+                    sx={{ display: "flex", flexDirection: "column", flex: 1 }}
                 >
                     <RichTextPlugin
+                        sx={{
+                            flexGrow: 1,
+                            overflowY: "auto",
+                            padding: "8px",
+                        }}
                         contentEditable={
                             <ContentEditable
                                 className="editor-input"
-                                aria-placeholder={""}
-                                placeholder={""}
+                                aria-placeholder=""
+                                placeholder=""
+                                sx={{
+                                    flexGrow: 1,
+                                    overflowY: "auto",
+                                    padding: "8px",
+                                }}
                             />
                         }
                         ErrorBoundary={LexicalErrorBoundary}
-                        initialEditorState={editorState}
                     />
                 </Box>
                 <TabIndentationPlugin />
-                <MyOnChangePlugin onChange={onChange} />
-                <RestoreEditorStatePlugin editorState={editorState} />
+                <MyOnChangePlugin
+                    editorState={editorState}
+                    setEditorState={setEditorState}
+                />
                 <HistoryPlugin />
                 <AutoFocusPlugin />
             </Box>

@@ -1,3 +1,20 @@
+.editor-shell .editor-container .editor-inner {
+    display: flex;
+    flex-direction: column;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.editor-input {
+    display: flex;
+    flex-direction: column;
+}
+
+.editor-input {
+    flex: 1;
+    padding: 10px;
+}
+
 /* Directionality */
 .ltr {
     direction: ltr;
@@ -9,7 +26,7 @@
 
 /* Paragraph and Quote */
 .editor-paragraph {
-    margin: 1em 0;
+    margin: 0.5em 0;
     font-size: 1rem;
     line-height: 1.5;
 }

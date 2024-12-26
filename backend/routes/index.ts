@@ -2,11 +2,9 @@ import postsRoute from "./posts";
 import projectsRoute from "./projects";
 import topicsRoute from "./topics";
 import adminRoute from "./admin";
-import dotenv from "dotenv";
 import {serveStaticFile} from "./static.ts";
 import {vcardRoute} from "./vcard.ts";
-
-dotenv.config();
+import {serveGeneratedFile} from "./generated.ts";
 
 export default async function router(req: Request, pool: any) {
     const url = new URL(req.url);
@@ -21,6 +19,8 @@ export default async function router(req: Request, pool: any) {
         return adminRoute(req, pool);
     } else if (url.pathname.startsWith("/api/leo.vcf")) {
         return vcardRoute(req);
+    } else if (url.pathname.startsWith("/api/generated/")) {
+        return serveGeneratedFile(req);
     }
 
     return serveStaticFile(req);

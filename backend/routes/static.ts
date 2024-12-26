@@ -3,8 +3,8 @@ import {readFile} from "fs/promises";
 
 const buildDir = join("frontend", "build");
 
-let indexHtml;
-if (process.env.NODE_ENV !== "development") {
+let indexHtml = "";
+if (process.env.NODE_ENV === "production") {
     indexHtml = await readFile(join(buildDir, "index.html"), "utf8");
 }
 
@@ -14,7 +14,7 @@ export async function serveStaticFile(req) {
     console.log(urlPath);
 
     if (urlPath === "/") {
-        if (process.env.NODE_ENV === "development") {
+        if (process.env.NODE_ENV === "production") {
             const dynamicIndexHtml = await readFile(join(buildDir, "index.html"), "utf8");
             return new Response(dynamicIndexHtml, {
                 status: 200,
@@ -43,7 +43,7 @@ export async function serveStaticFile(req) {
         });
     } catch (err) {
         if (err.code === "ENOENT") {
-            if (process.env.NODE_ENV === "development") {
+            if (process.env.NODE_ENV === "production") {
                 const dynamicIndexHtml = await readFile(join(buildDir, "index.html"), "utf8");
                 return new Response(dynamicIndexHtml, {
                     status: 200,

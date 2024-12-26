@@ -1,14 +1,14 @@
 CREATE TABLE IF NOT EXISTS topics
 (
     id   SERIAL PRIMARY KEY,
-    name TEXT NOT NULL
+    name TEXT NOT NULL,
+    color TEXT
 );
 
 CREATE TABLE IF NOT EXISTS projects
 (
     id          SERIAL PRIMARY KEY,
     name        TEXT NOT NULL,
-    color       VARCHAR(10) NOT NULL,
     topic_id INT REFERENCES topics(id) ON UPDATE CASCADE,
     summary TEXT,
     description TEXT
@@ -22,3 +22,7 @@ CREATE TABLE IF NOT EXISTS posts (
      created_at TIMESTAMP DEFAULT NOW(),
      updated_at TIMESTAMP DEFAULT null
 );
+
+SELECT setval('projects_id_seq', (SELECT MAX(id) FROM projects));
+SELECT setval('topics_id_seq', (SELECT MAX(id) FROM topics));
+SELECT setval('posts_id_seq', (SELECT MAX(id) FROM posts));

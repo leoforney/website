@@ -17,7 +17,7 @@ import {
 import FilterListIcon from '@mui/icons-material/FilterList';
 import {NoEntries} from './NoEntries.jsx';
 
-const ProjectList = ({ topicFilter = [] }) => {
+const ProjectList = ({ topicFilter = [], onClearForm }) => {
     const [projects, setProjects] = useState(null);
     const [topics, setTopics] = useState({});
     const [filteredProjects, setFilteredProjects] = useState([]);
@@ -82,6 +82,13 @@ const ProjectList = ({ topicFilter = [] }) => {
         navigate(`${location.pathname}?${searchParams.toString()}`);
     };
 
+    const handleProjectSelection = (projectId) => {
+        if (onClearForm) {
+            onClearForm();
+        }
+        navigate(`/projects/${projectId}`);
+    };
+
     if (projects === null) {
         return (
             <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: 10 }}>
@@ -129,6 +136,7 @@ const ProjectList = ({ topicFilter = [] }) => {
                             <Box style={{ display: 'flex', alignItems: 'center', flex: 1 }}>
                                 <Link
                                     to={`/projects/${project.id}`}
+                                    onClick={() => handleProjectSelection(project.id)}
                                     style={{
                                         flexGrow: 1,
                                         textDecoration: 'none',

@@ -1,10 +1,16 @@
-import React, {useEffect, useState} from "react";
-import {Box, Button, Grid, TextField} from "@mui/material";
-import {fetchPostsByProjectId, fetchProjects, fetchTopics, savePost, updatePost} from "../../api.js";
+import React, { useEffect, useState } from "react";
+import { Box, Button, Grid, TextField } from "@mui/material";
+import {
+    fetchPostsByProjectId,
+    fetchProjects,
+    fetchTopics,
+    savePost,
+    updatePost,
+} from "../../api.js";
 import AdminProjectsList from "./AdminProjectList";
 import AdminPostsList from "./AdminPostsList";
 import AdminTopicsList from "./AdminTopicsList";
-import {Editor} from "../editor/Editor.jsx";
+import { Editor } from "../editor/Editor.jsx";
 
 const Admin = () => {
     const [projects, setProjects] = useState([]);
@@ -39,14 +45,26 @@ const Admin = () => {
     const handleSavePost = async () => {
         const editor_state = JSON.stringify(editorState);
         if (isCreating) {
-            await savePost({ project_id: selectedProject.id, title: postTitle, editor_state: editor_state });
+            await savePost({
+                project_id: selectedProject.id,
+                title: postTitle,
+                editor_state: editor_state,
+            });
         } else {
-            await updatePost({ ...selectedPost, title: postTitle, editor_state: editor_state });
+            await updatePost({
+                ...selectedPost,
+                title: postTitle,
+                editor_state: editor_state,
+            });
         }
         const postsData = await fetchPostsByProjectId(selectedProject.id);
         setPosts(postsData);
         setIsCreating(false);
     };
+
+    const editorKey = isCreating
+        ? `new-${selectedProject?.id || "project"}`
+        : `post-${selectedPost?.id || "none"}`;
 
     return (
         <Box style={{ padding: "16px", border: "1px solid #ccc" }}>
@@ -68,23 +86,21 @@ const Admin = () => {
                         posts={posts}
                         selectedPost={selectedPost}
                         onPostSelect={(post) => {
-                            setSelectedPost(post);
                             setEditorState(JSON.parse(post.editor_state));
+                            setSelectedPost(post);
                             setPostTitle(post.title);
                             setIsCreating(false);
                         }}
                         onCreatePost={() => {
-                            setSelectedPost(null);
                             setEditorState(null);
+                            setSelectedPost(null);
                             setPostTitle("");
                             setIsCreating(true);
                         }}
                     />
                 </Grid>
                 <Grid item xs={3}>
-                    <AdminTopicsList
-                        topics={topics}
-                    />
+                    <AdminTopicsList topics={topics} />
                 </Grid>
             </Grid>
             {(selectedPost || isCreating) && (
@@ -96,7 +112,12 @@ const Admin = () => {
                         onChange={(e) => setPostTitle(e.target.value)}
                         style={{ marginBottom: "8px" }}
                     />
-                    <Editor editorState={editorState} setEditorState={setEditorState} />
+                    <Editor
+                        key={editorKey}
+                        editorState={editorState}
+                        setEditorState={setEditorState}
+                        className={"container-root"}
+                    />
                     <Button
                         onClick={handleSavePost}
                         variant="contained"

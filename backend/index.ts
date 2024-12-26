@@ -8,6 +8,7 @@ import {migrate} from "./config/migrate";
 
     // @ts-ignore
     serve({
+        development: process.env.NODE_ENV !== "production",
         port: 3000,
         async fetch(req) {
             const pool = getPool();

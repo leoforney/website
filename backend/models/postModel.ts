@@ -15,6 +15,28 @@ export async function fetchPostsByProjectId(pool: any, projectId: number) {
     return result.rows;
 }
 
+export async function fetchPostsByTopicId(pool: any, topicId: number) {
+    const query = `
+        SELECT 
+            posts.project_id,
+            posts.editor_state,
+            posts.title,
+            projects.name AS project_name,
+            topics.name AS topic_name
+        FROM 
+            posts
+        JOIN 
+            projects ON posts.project_id = projects.id
+        JOIN 
+            topics ON projects.topic_id = topics.id
+        WHERE 
+            topics.id = $1;
+    `;
+    const values = [topicId];
+    const result = await pool.query(query, values);
+    return result.rows;
+}
+
 export async function insertPost(pool: any, { project_id, editor_state, title }: any) {
     const result = await pool.query(
         "INSERT INTO posts (project_id, editor_state, title) VALUES ($1, $2, $3) RETURNING *",

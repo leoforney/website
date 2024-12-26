@@ -1,34 +1,40 @@
-import {Document, Page, StyleSheet, Text, View} from '@react-pdf/renderer';
+import {Document, Page, Text, View} from '@react-pdf/renderer';
 import ReactPDF from "@react-pdf/renderer/lib/react-pdf";
+import path from "path";
+import fs from "fs";
 
-function processSummary(summary: string): string[] {
-    return summary
-        .split('*')
-        .map((bullet) => bullet.trim())
-        .filter((bullet) => bullet.length > 0);
+export interface ProjectSummaryDefinition {
+    name: string,
+    summaryPoints: string[]
 }
 
-const styles = StyleSheet.create({
-    page: {
-        padding: 30,
-        fontSize: 8,
-    },
-    bulletPoint: {
-        marginBottom: 5,
-    },
-});
+export const createParentDirs = async (filePath) => {
+    const parentDir = path.dirname(filePath);
 
-export const generatePDF = async (summary: string, outputPath: string) => {
-    const bullets = processSummary(summary);
+    await fs.promises.mkdir(parentDir, { recursive: true });
+};
 
+export const renderTopicPdf = async (projects: ProjectSummaryDefinition[], outputPath: string) => {
     const SummaryPDF = (
         <Document>
-            <Page size="A4" style={styles.page}>
+            <Page size="A4" style={{ padding: 20 }}>
+                <View style={{ textAlign: 'center', marginBottom: 20 }}>
+                    <Text style={{ fontSize: 24, fontWeight: 'bold' }}>Leo Forney</Text>
+                    <Text style={{ fontSize: 12 }}>forneyleo@gmail.com | 847-946-9328 | Chicago, IL</Text>
+                </View>
+
+                <View style={{ borderBottom: '1px solid black', marginBottom: 20 }} />
+
                 <View>
-                    {bullets.map((bullet, index) => (
-                        <Text key={index} style={styles.bulletPoint}>
-                            {bullet}
-                        </Text>
+                    <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>Personal Projects</Text>
+
+                    {projects.map((project, index) => (
+                        <View key={index} style={{ marginBottom: 15 }}>
+                            <Text style={{ fontSize: 14, fontWeight: 'bold' }}>{`Project ${index + 1}: ${project.name}`}</Text>
+                            {project.summaryPoints.map((point, pointIndex) => (
+                                <Text key={pointIndex} style={{ fontSize: 12, marginLeft: 10 }}>{`• ${point}`}</Text>
+                            ))}
+                        </View>
                     ))}
                 </View>
             </Page>

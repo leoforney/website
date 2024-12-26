@@ -1,11 +1,16 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
-import {MathUtils} from "three";
-import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
+import { MathUtils } from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import TouchAppIcon from "@mui/icons-material/TouchApp";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 export function PLYViewer() {
     const mountRef = useRef(null);
     const [modelLoaded, setModelLoaded] = useState(false);
+    const [showTouchHint, setShowTouchHint] = useState(false);
+    const interactionRef = useRef(false);
 
     useEffect(() => {
         const scene = new THREE.Scene();
@@ -61,19 +66,31 @@ export function PLYViewer() {
             const colors = [];
             const color = new THREE.Color();
 
-            lines.forEach((line) => {
+            lines.forEach((line, index) => {
                 const tokens = line.split(" ");
                 const x = parseFloat(tokens[0]);
                 const y = parseFloat(tokens[1]);
                 const z = parseFloat(tokens[2]);
+
+                if (isNaN(x) || isNaN(y) || isNaN(z)) {
+                    console.warn(`Skipping invalid vertex data at line ${index + dataStartIndex}:`, line);
+                    return;
+                }
+
                 positions.push(x, y, z);
 
                 if (hasColors) {
                     const r = parseInt(tokens[6]) / 255;
                     const g = parseInt(tokens[7]) / 255;
                     const b = parseInt(tokens[8]) / 255;
-                    color.setRGB(r, g, b);
-                    colors.push(color.r, color.g, color.b);
+
+                    if (isNaN(r) || isNaN(g) || isNaN(b)) {
+                        console.warn(`Skipping invalid color data at line ${index + dataStartIndex}:`, line);
+                        colors.push(1, 1, 1);
+                    } else {
+                        color.setRGB(r, g, b);
+                        colors.push(color.r, color.g, color.b);
+                    }
                 } else {
                     colors.push(1, 1, 1);
                 }
@@ -124,11 +141,23 @@ export function PLYViewer() {
             }
         };
 
+        const handleUserInteraction = () => {
+            interactionRef.current = true;
+            setShowTouchHint(false);
+        };
+
+        const hintTimeout = setTimeout(() => {
+            if (!interactionRef.current) setShowTouchHint(true);
+        }, 5000);
+
+        mountRef.current.addEventListener("mousedown", handleUserInteraction);
+        mountRef.current.addEventListener("touchstart", handleUserInteraction);
         window.addEventListener('resize', handleResize);
 
         return () => {
             mountRef.current?.removeChild(renderer.domElement);
             renderer.dispose();
+            clearTimeout(hintTimeout);
             window.removeEventListener('resize', handleResize);
         };
     }, []);
@@ -146,7 +175,30 @@ export function PLYViewer() {
                     display: modelLoaded ? 'block' : 'none',
                     position: 'relative',
                 }}
-            ></div>
+            >
+                {showTouchHint && (
+                    <div
+                        style={{
+                            position: "absolute",
+                            top: 0,
+                            left: 0,
+                            width: "100%",
+                            height: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            backgroundColor: "rgba(0, 0, 0, 0.3)",
+                            zIndex: 1,
+                        }}
+                    >
+                        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                            <ArrowBackIcon sx={{ fontSize: 40, color: "white" }} />
+                            <TouchAppIcon sx={{ fontSize: 50, color: "white" }} />
+                            <ArrowForwardIcon sx={{ fontSize: 40, color: "white" }} />
+                        </div>
+                    </div>
+                )}
+            </div>
         </>
     );
 }

@@ -3,6 +3,11 @@ export async function fetchProjectById(pool: any, id: number) {
     return result.rows[0];
 }
 
+export async function fetchProjectsByTopicId(pool: any, topicId: number) {
+    const result = await pool.query("SELECT * FROM projects WHERE topic_id = $1", [topicId]);
+    return result.rows;
+}
+
 export async function fetchAllProjects(pool: any) {
     const result = await pool.query("SELECT * FROM projects ORDER BY id ASC");
     return result.rows;
