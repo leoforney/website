@@ -1,4 +1,4 @@
-import {Document, Page, Text, View} from '@react-pdf/renderer';
+import {Document, Page, Text, View, Link} from '@react-pdf/renderer';
 import ReactPDF from '@react-pdf/renderer/lib/react-pdf';
 import path from 'path';
 import fs from 'fs';
@@ -6,6 +6,7 @@ import fs from 'fs';
 export interface ProjectSummaryDefinition {
     name: string;
     summaryPoints: string[];
+    link: string;
 }
 
 export const createParentDirs = async (filePath: string): Promise<void> => {
@@ -13,30 +14,77 @@ export const createParentDirs = async (filePath: string): Promise<void> => {
     await fs.promises.mkdir(parentDir, { recursive: true });
 };
 
+const education = [
+    {
+        institution: "Iowa State University",
+        degree: "B.S. Software Engineering",
+        fromDate: "August 2019",
+        toDate: "May 2023"
+    }
+];
+
+const certifications = [
+    {
+        name: "AWS Associate Developer",
+        fromDate: "Aug 2024",
+    }
+];
+
+const professionalExperience = [
+    {
+        name: "Software Developer",
+        company: "Quality Consulting Inc.",
+        fromDate: "June 2023",
+        toDate: "Present",
+        summaryPoints: "Designed and implemented key features in client applications using Angular and TypeScript.\
+* Led development of a GIS-based offline mapping feature for field adjusters.\
+* Developed internal tools to automate and resolve version control merge conflicts.\
+".split('*')
+    }
+];
+
+const skills = ["JavaScript", "TypeScript", "React", "Angular", "Python", "AWS", "SQL", "GIS"];
+
 export const renderTopicPdf = async (
     projects: ProjectSummaryDefinition[],
     outputPath: string
 ): Promise<void> => {
+    // @ts-ignore
     const SummaryPDF = (
         <Document>
-            <Page size="A4" style={{ padding: 20 }}>
-                <View style={{ textAlign: 'center', marginBottom: 20 }}>
+            <Page size="A4" style={{ padding: 15 }}>
+                <View style={{ textAlign: 'center', marginBottom: 5 }}>
                     <Text style={{ fontSize: 24, fontWeight: 'bold' }}>Leo Forney</Text>
                     <Text style={{ fontSize: 12 }}>
                         forneyleo@gmail.com | 847-946-9328 | Chicago, IL
                     </Text>
                 </View>
 
-                <View style={{ borderBottom: '1px solid black', marginBottom: 20 }} />
+                <View style={{ borderBottom: '1px solid black', marginBottom: 10 }} />
 
-                <View>
-                    <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>Personal Projects</Text>
+                <View style={{ marginBottom: 15 }}>
+                    <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 5 }}>Professional Experience</Text>
+                    {professionalExperience.map((experience, index) => (
+                        <View key={index} style={{ marginBottom: 10 }}>
+                            <Text style={{ fontSize: 14, fontWeight: 'bold' }}>{experience.name}</Text>
+                            <Text style={{ fontSize: 12, fontStyle: 'italic' }}>{experience.company}</Text>
+                            <Text style={{ fontSize: 12 }}>{`${experience.fromDate} - ${experience.toDate}`}</Text>
+                            {experience.summaryPoints.map((point, pointIndex) => (
+                                <Text key={pointIndex} style={{ fontSize: 12, marginLeft: 10 }}>
+                                    {`• ${point}`}
+                                </Text>
+                            ))}
+                        </View>
+                    ))}
+                </View>
 
+                <View style={{ marginBottom: 15 }}>
+                    <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 5 }}>Personal Projects</Text>
                     {projects.map((project, index) => (
-                        <View key={index} style={{ marginBottom: 15 }}>
-                            <Text style={{ fontSize: 14, fontWeight: 'bold' }}>
-                                {`Project ${index + 1}: ${project.name}`}
-                            </Text>
+                        <View key={index} style={{ marginBottom: 10 }}>
+                            <Link src={project.link} style={{ textDecoration: 'none', color: 'black' }}>
+                                <Text style={{ fontSize: 14, fontWeight: 'bold' }}>{project.name}</Text>
+                            </Link>
                             {project.summaryPoints.map((point, pointIndex) => (
                                 <Text key={pointIndex} style={{ fontSize: 12, marginLeft: 10 }}>
                                     {`• ${point}`}
@@ -45,17 +93,42 @@ export const renderTopicPdf = async (
                         </View>
                     ))}
                 </View>
+
+                <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginBottom: 15 }}>
+                    <View style={{ flex: 1, marginRight: 5 }}>
+                        <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 5 }}>Education</Text>
+                        {education.map((edu, index) => (
+                            <View key={index} style={{ marginBottom: 5 }}>
+                                <Text style={{ fontSize: 14, fontWeight: 'bold' }}>{edu.institution}</Text>
+                                <Text style={{ fontSize: 12 }}>{edu.degree}</Text>
+                                <Text style={{ fontSize: 12 }}>{`${edu.fromDate} - ${edu.toDate}`}</Text>
+                            </View>
+                        ))}
+                    </View>
+
+                    <View style={{ flex: 1 }}>
+                        <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 5 }}>Certifications</Text>
+                        {certifications.map((cert, index) => (
+                            <View key={index} style={{ marginBottom: 5 }}>
+                                <Text style={{ fontSize: 14, fontWeight: 'bold' }}>{cert.name}</Text>
+                                <Text style={{ fontSize: 12 }}>{`${cert.fromDate}`}</Text>
+                            </View>
+                        ))}
+                    </View>
+                </View>
+
+                <View>
+                    <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 5 }}>Skills</Text>
+                    <Text style={{ fontSize: 12 }}>{skills.join(', ')}</Text>
+                </View>
             </Page>
         </Document>
     );
 
-    // Create directories if they don't exist
     await createParentDirs(outputPath);
 
-    // Generate the PDF as a stream
     const pdfStream = await ReactPDF.renderToStream(SummaryPDF);
 
-    // Write the stream data to the file using Bun's fs methods
     const writable = fs.createWriteStream(outputPath);
     pdfStream.pipe(writable);
 
