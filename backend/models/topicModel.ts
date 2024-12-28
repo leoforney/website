@@ -15,3 +15,15 @@ export async function insertTopic(pool: any, { name, color }: any) {
     );
     return result.rows[0];
 }
+
+export async function fetchTopicsWithResumePoints(pool: any) {
+    const query = `
+        SELECT DISTINCT t.*
+        FROM topics t
+        JOIN projects p ON t.id = p.topic_id
+        WHERE p.resume_points IS NOT NULL
+    `;
+
+    const result = await pool.query(query);
+    return result.rows;
+}

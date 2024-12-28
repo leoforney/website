@@ -35,6 +35,20 @@ export async function updateProjectSummary(pool: any, id: number, summary: strin
     return result.rows[0];
 }
 
+export async function updateProjectResumePoints(pool: any, id: number, resume_points: string) {
+    const result = await pool.query(
+        `
+        UPDATE projects
+        SET 
+            resume_points = $1
+        WHERE id = $2
+        RETURNING *;
+        `,
+        [resume_points, id]
+    );
+    return result.rows[0];
+}
+
 export async function updateProject(pool: any, id: number, { name, topic_id, description }: any) {
     const result = await pool.query(
         `

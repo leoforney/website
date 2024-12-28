@@ -1,16 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { Box, Button, Grid, TextField } from "@mui/material";
-import {
-    fetchPostsByProjectId,
-    fetchProjects,
-    fetchTopics,
-    savePost,
-    updatePost,
-} from "../../api.js";
+import React, {useEffect, useState} from "react";
+import {Box, Button, Grid, TextField} from "@mui/material";
+import {fetchPostsByProjectId, fetchProjects, fetchTopics, savePost, updatePost,} from "../../api.js";
 import AdminProjectsList from "./AdminProjectList";
 import AdminPostsList from "./AdminPostsList";
 import AdminTopicsList from "./AdminTopicsList";
-import { Editor } from "../editor/Editor.jsx";
+import {Editor} from "../editor/Editor.jsx";
 
 const Admin = () => {
     const [projects, setProjects] = useState([]);

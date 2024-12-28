@@ -1,11 +1,18 @@
 import {createTopic, getAllTopics, getTopicById} from "../controllers/topicsController";
 import adminRoute from "./admin.ts";
+import {fetchTopicsWithResumePoints} from "../models/topicModel.ts";
 
 export default async function topicsRoute(req: Request, pool: any) {
     const url = new URL(req.url);
     const id = url.searchParams.get("id");
+    const withResumePoints = url.searchParams.get("withResumePoints") === "true";
 
     if (req.method === "GET") {
+        if (withResumePoints) {
+            const topics = await fetchTopicsWithResumePoints(pool);
+            return new Response(JSON.stringify(topics), { status: 200 });
+        }
+
         if (id) {
             const topic = await getTopicById(pool, parseInt(id));
             return new Response(JSON.stringify(topic), { status: 200 });

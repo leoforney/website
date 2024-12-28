@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import * as THREE from "three";
-import { MathUtils } from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import {MathUtils} from "three";
+import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 import TouchAppIcon from "@mui/icons-material/TouchApp";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";

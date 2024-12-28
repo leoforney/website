@@ -6,6 +6,7 @@ import ProjectsPage from "../pages/ProjectsPage.jsx";
 import Admin from "../components/admin/Admin.jsx";
 import {createBrowserRouter, createRoutesFromElements, Route} from "react-router-dom";
 import ContactPage from "../pages/ContactPage.jsx";
+import ResumePage from "../pages/ResumePage.jsx";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -16,6 +17,7 @@ const router = createBrowserRouter(
             <Route path="/projects/:id" element={<ProjectDetailsPage />} />
             <Route path="/posts/:id" element={<PostPage />} />
             <Route path="contact" element={<ContactPage/>}/>
+            <Route path="resume" element={<ResumePage />} />
             <Route path="admin" element={<Admin/>}/>
         </Route>
     )

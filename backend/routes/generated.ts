@@ -1,6 +1,5 @@
-import { join, normalize } from "path";
-import { readFile } from "fs/promises";
-import { stat } from "fs/promises";
+import {join, normalize} from "path";
+import {readFile, stat} from "fs/promises";
 
 const generatedDir = join(process.cwd(), "generated");
 
@@ -31,7 +30,9 @@ export async function serveGeneratedFile(req: Request): Promise<Response> {
             status: 200,
             headers: {
                 "Content-Type": "application/octet-stream",
-                "Cache-Control": "public, max-age=259200",
+                "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
+                "Pragma": "no-cache",
+                "Expires": "0",
             },
         });
     } catch (err) {
