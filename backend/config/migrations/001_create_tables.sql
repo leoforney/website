@@ -12,7 +12,8 @@ CREATE TABLE IF NOT EXISTS projects
     topic_id INT REFERENCES topics(id) ON UPDATE CASCADE,
     summary TEXT,
     description TEXT,
-    resume_points TEXT
+    resume_points TEXT,
+    rank INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS posts (

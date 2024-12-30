@@ -9,7 +9,27 @@ export async function fetchProjectsByTopicId(pool: any, topicId: number) {
 }
 
 export async function fetchAllProjects(pool: any) {
-    const result = await pool.query("SELECT * FROM projects ORDER BY id ASC");
+    const query = `
+        SELECT 
+            p.id, 
+            p.name, 
+            p.topic_id, 
+            p.summary, 
+            p.description, 
+            p.resume_points, 
+            p.rank,
+            COALESCE(
+                (SELECT MAX(COALESCE(posts.updated_at, posts.created_at)) 
+                 FROM posts 
+                 WHERE posts.project_id = p.id), 
+                NULL
+            ) AS latest_post_date
+        FROM 
+            projects p
+        ORDER BY 
+            p.id ASC;
+    `;
+    const result = await pool.query(query);
     return result.rows;
 }
 
@@ -63,4 +83,37 @@ export async function updateProject(pool: any, id: number, { name, topic_id, des
         [name, topic_id, description, id]
     );
     return result.rows[0];
+}
+
+export async function bulkUpdateProjectRank(pool: any, projects: { id: number; score: number }[]) {
+    if (projects.length === 0) {
+        return [];
+    }
+
+    const client = await pool.connect();
+    try {
+        await client.query("BEGIN");
+
+        const updatedProjects = [];
+        for (const project of projects) {
+            const query = `
+                UPDATE projects
+                SET rank = $1
+                WHERE id = $2
+                RETURNING *;
+            `;
+            const result = await client.query(query, [project.score, project.id]);
+            if (result.rows.length > 0) {
+                updatedProjects.push(result.rows[0]);
+            }
+        }
+
+        await client.query("COMMIT");
+        return updatedProjects;
+    } catch (error) {
+        await client.query("ROLLBACK");
+        throw error;
+    } finally {
+        client.release();
+    }
 }

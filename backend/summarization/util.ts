@@ -8,7 +8,7 @@ const apiKey = existsSync(SECRET_PATH)
     : process.env.GEMINI_KEY || "";
 export const genAI = new GoogleGenerativeAI(apiKey);
 
-const generationConfig = {
+const defaultGenerationConfig = {
     temperature: 1,
     topP: 0.95,
     topK: 40,
@@ -16,14 +16,14 @@ const generationConfig = {
     responseMimeType: "text/plain",
 };
 
-export function makeNewChatSession(systemPrompt: string) {
+export function makeNewChatSession(systemPrompt: string, genConfig?: any | undefined) {
     const summarizationModel = genAI.getGenerativeModel({
         model: "gemini-1.5-flash",
         systemInstruction: systemPrompt
     });
 
     const chatSession = summarizationModel.startChat({
-        generationConfig,
+        generationConfig: genConfig ?? defaultGenerationConfig,
         history: [
         ],
     });

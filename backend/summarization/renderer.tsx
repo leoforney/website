@@ -36,10 +36,15 @@ const professionalExperience = [
         company: "Quality Consulting Inc.",
         fromDate: "June 2023",
         toDate: "Present",
-        summaryPoints: "Designed and implemented key features in client applications using Angular and TypeScript.\
-* Led development of a GIS-based offline mapping feature for field adjusters.\
-* Developed internal tools to automate and resolve version control merge conflicts.\
-".split('*')
+        summaryPoints: "Implemented batch PDF generation using RabbitMQ, saving $18M annually in reinsurance costs.\
+* Created a custom JavaFX chart renderer to generate efficient coverage charts at scale.\
+* Designed and developed a cross-platform claims application using Ionic, Angular, and SQLite.\
+* Built offline mapping tools with ArcGIS, reducing $700/device in annual licensing costs.\
+* Integrated Oracle GeoDatabase to surface land data, eliminating dependency on ArcGIS Pro.\
+* Streamlined large-scale policy handling with an RMA-compliant batch import/export system.\
+* Enhanced field productivity with offline map tiles, photo attachments, and note-taking features.\
+* Designed user-friendly interfaces for quoting and claims using jQuery, JSP, and Spring. \
+".split('*').map((bullet) => bullet.trim())
     }
 ];
 

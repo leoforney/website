@@ -17,6 +17,19 @@ import {
 import FilterListIcon from '@mui/icons-material/FilterList';
 import {NoEntries} from './NoEntries.jsx';
 
+const sortProjects = (projects) => {
+    return projects.sort((a, b) => {
+        const getDate = (project) =>
+            new Date(project.latest_post_date || project.updated_at || project.created_at);
+
+        if (a.rank == null && b.rank == null) return getDate(b) - getDate(a);
+        if (a.rank == null) return 1;
+        if (b.rank == null) return -1;
+        if (a.rank !== b.rank) return b.rank - a.rank;
+        return getDate(b) - getDate(a);
+    });
+};
+
 const ProjectList = ({ topicFilter = [], onClearForm }) => {
     const [projects, setProjects] = useState(null);
     const [topics, setTopics] = useState({});
@@ -36,8 +49,10 @@ const ProjectList = ({ topicFilter = [], onClearForm }) => {
                     return acc;
                 }, {});
                 setTopics(topicsMap);
-                setProjects(projectsData);
-                setFilteredProjects(projectsData);
+
+                const sortedProjects = sortProjects(projectsData);
+                setProjects(sortedProjects);
+                setFilteredProjects(sortedProjects);
             } catch (error) {
                 console.error("Failed to fetch data:", error);
                 setProjects([]);
@@ -48,14 +63,19 @@ const ProjectList = ({ topicFilter = [], onClearForm }) => {
     }, []);
 
     useEffect(() => {
-        if (selectedTopics.length > 0) {
-            setFilteredProjects(
-                projects?.filter((project) => selectedTopics.includes(project.topic_id))
-            );
-        } else {
-            setFilteredProjects(projects);
+        if (projects) {
+            let filtered = projects;
+
+            if (selectedTopics.length > 0) {
+                filtered = filtered.filter((project) =>
+                    selectedTopics.includes(project.topic_id)
+                );
+            }
+
+            setFilteredProjects(sortProjects(filtered));
         }
     }, [selectedTopics, projects]);
+
 
     const handleFilterClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -135,7 +155,6 @@ const ProjectList = ({ topicFilter = [], onClearForm }) => {
                         >
                             <Box style={{ display: 'flex', alignItems: 'center', flex: 1 }}>
                                 <Link
-                                    to={`/projects/${project.id}`}
                                     onClick={() => handleProjectSelection(project.id)}
                                     style={{
                                         flexGrow: 1,

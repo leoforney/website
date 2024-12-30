@@ -12,7 +12,7 @@ export async function serveGeneratedFile(req: Request): Promise<Response> {
     }
 
     const filePath = join(generatedDir, normalize(filename));
-    console.log(`filepath: ${filePath}`)
+    console.log(`Retrieving generated file: ${filePath}`)
 
     try {
         const dirStats = await stat(generatedDir);

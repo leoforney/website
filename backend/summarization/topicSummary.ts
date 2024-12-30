@@ -12,12 +12,20 @@ function splitSummaries(summary: string): string[] {
 
 export async function generateResumePdf(pool: any, topicId: number) {
     const projects = await fetchProjectsByTopicId(pool, topicId);
-    const projectPointsDefinition = projects.filter(p => p.resume_points).map((p) => {
-        return {
-            name: p.name,
-            summaryPoints: splitSummaries(p.resume_points),
-        }
-    })
+    const projectPointsDefinition = projects
+        .sort((a, b) => {
+            if (a.rank == null && b.rank == null) return 0;
+            if (a.rank == null) return 1;
+            if (b.rank == null) return -1;
+            return b.rank - a.rank;
+        })
+        .filter(p => p.resume_points)
+        .map((p) => {
+            return {
+                name: p.name,
+                summaryPoints: splitSummaries(p.resume_points),
+            };
+        });
     const topic = await fetchTopicById(pool, topicId);
     const outputPath = path.join(process.cwd(), 'generated', `Leo_Forney_${topic.name}.pdf`);
     await createParentDirs(outputPath);

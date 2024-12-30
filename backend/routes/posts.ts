@@ -1,6 +1,6 @@
 import {createPost, getAllPosts, getPostById, getPostsByProjectId, updatePost} from "../controllers/postsController";
 import adminRoute from "./admin.ts";
-import {summarizeProject} from "../summarization/projectSummary.ts";
+import {rankProjects, summarizeProject} from "../summarization/projectSummary.ts";
 import {generateResumePdf} from "../summarization/topicSummary.ts";
 
 export default async function postsRoute(req: Request, pool: any) {
@@ -48,8 +48,9 @@ export default async function postsRoute(req: Request, pool: any) {
         }
 
         if (data.project_id) {
-            summarizeProject(pool, data.project_id).then((p) => {
-                generateResumePdf(pool, p.topic_id);
+            summarizeProject(pool, data.project_id).then(async (p) => {
+                await rankProjects(pool);
+                await generateResumePdf(pool, p.topic_id);
             })
         }
 
