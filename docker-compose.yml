@@ -8,6 +8,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      queue:
+        condition: service_started
     restart: always
     environment:
       DB_HOST: postgres
@@ -16,6 +18,8 @@ services:
       DB_DATABASE: exampledb
       DB_PORT: 5432
       NODE_ENV: production
+      QUEUE_HOST: queue
+      QUEUE_PORT: 5672
     secrets:
       - admin_password
       - gemini_key
@@ -37,6 +41,32 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  queue:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672" # Management UI
+    restart: always
+
+  renderer:
+    build:
+      context: ./renderer
+      dockerfile: Dockerfile
+    depends_on:
+      queue:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+    environment:
+      QUEUE_HOST: queue
+      QUEUE_PORT: 5672
+      DB_HOST: postgres
+      DB_USER: postgres
+      DB_PASSWORD: password
+      DB_DATABASE: exampledb
+      DB_PORT: 5432
+    restart: always
 
 secrets:
   admin_password:

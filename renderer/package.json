@@ -1,0 +1,11 @@
+{
+  "name": "renderer",
+  "version": "1.0.0",
+  "main": "app.ts",
+  "dependencies": {
+    "bun": "*",
+    "puppeteer": "^19.6.0",
+    "pg": "^8.10.0",
+    "amqplib": "^0.10.3"
+  }
+}

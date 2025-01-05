@@ -1,13 +1,33 @@
-import React, {Suspense, useEffect, useState} from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import Typography from "@mui/material/Typography";
-import {Box, Button, CssBaseline, Grid} from "@mui/material";
-import {getAnalytics, logEvent} from "firebase/analytics";
-import {firebaseApp} from "../WebsiteFirebaseConfig.js";
-import {PLYViewer, SkeletonViewer} from "../components/PLYViewer.jsx";
-import {fetchTopics} from "../api.js";
-import {useNavigate} from "react-router-dom";
+import { Box, Button, CssBaseline, Grid } from "@mui/material";
+import { getAnalytics, logEvent } from "firebase/analytics";
+import { firebaseApp } from "../WebsiteFirebaseConfig.js";
+import { fetchTopics } from "../api.js";
+import { useNavigate } from "react-router-dom";
 
 const analytics = getAnalytics(firebaseApp);
+
+const LazyPLYViewer = React.lazy(() => import("../components/PLYViewer.jsx"));
+
+export function SkeletonViewer() {
+    return (
+        <div
+            style={{
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                fontSize: '1.2em',
+                color: '#888',
+                borderRadius: '10px',
+            }}
+        >
+            Loading...
+        </div>
+    );
+}
 
 const AboutPage = () => {
     const [topics, setTopics] = useState([]);
@@ -49,8 +69,9 @@ const AboutPage = () => {
                         position: "relative",
                     }}
                 >
+                    {/* Use lazy-loaded PLYViewer */}
                     <Suspense fallback={<SkeletonViewer />}>
-                        <PLYViewer />
+                        <LazyPLYViewer />
                     </Suspense>
                 </Grid>
                 <Grid

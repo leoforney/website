@@ -6,7 +6,26 @@ import TouchAppIcon from "@mui/icons-material/TouchApp";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
-export function PLYViewer() {
+function SkeletonViewer() {
+    return (
+        <div
+            style={{
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                fontSize: '1.2em',
+                color: '#888',
+                borderRadius: '10px',
+            }}
+        >
+            Loading...
+        </div>
+    );
+}
+
+export default function PLYViewer() {
     const mountRef = useRef(null);
     const [modelLoaded, setModelLoaded] = useState(false);
     const [showTouchHint, setShowTouchHint] = useState(false);
@@ -200,24 +219,5 @@ export function PLYViewer() {
                 )}
             </div>
         </>
-    );
-}
-
-export function SkeletonViewer() {
-    return (
-        <div
-            style={{
-                width: '100%',
-                height: '100%',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                fontSize: '1.2em',
-                color: '#888',
-                borderRadius: '10px',
-            }}
-        >
-            Loading...
-        </div>
     );
 }

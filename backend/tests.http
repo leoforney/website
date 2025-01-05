@@ -52,3 +52,6 @@ Content-Type: application/json
 
 ### Get all posts
 GET http://localhost:3000/api/posts
+
+### Attempt renderer
+GET http://localhost:3000/api/admin/fetchSite?password=password&url=https://careers.caterpillar.com/en/jobs/job/r0000282604-software-engineer/

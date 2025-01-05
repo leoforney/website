@@ -9,6 +9,8 @@ import {serveGeneratedFile} from "./generated.ts";
 export default async function router(req: Request, pool: any) {
     const url = new URL(req.url);
 
+    console.log(url.pathname)
+
     if (url.pathname.startsWith("/api/posts")) {
         return postsRoute(req, pool);
     } else if (url.pathname.startsWith("/api/projects")) {

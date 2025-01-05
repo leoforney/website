@@ -1,12 +1,13 @@
 import ErrorPage from "../pages/NotFoundPage.jsx";
+import { lazy } from 'react';
 import AboutPage from "../pages/AboutPage.jsx";
 import ProjectDetailsPage from "../pages/ProjectDetailsPage.jsx";
 import PostPage from "../pages/PostPage.jsx";
 import ProjectsPage from "../pages/ProjectsPage.jsx";
-import Admin from "../components/admin/Admin.jsx";
+const Admin = lazy(() => import("../components/admin/Admin.jsx"));
 import {createBrowserRouter, createRoutesFromElements, Route} from "react-router-dom";
 import ContactPage from "../pages/ContactPage.jsx";
-import ResumePage from "../pages/ResumePage.jsx";
+const ResumePage = lazy(() => import("../pages/ResumePage.jsx"));
 
 const router = createBrowserRouter(
     createRoutesFromElements(

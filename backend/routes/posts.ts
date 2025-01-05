@@ -7,6 +7,7 @@ export default async function postsRoute(req: Request, pool: any) {
     const url = new URL(req.url);
     const id = url.searchParams.get("id");
     const projectId = url.searchParams.get("project_id");
+    console.log("Posts")
 
     if (req.method === "GET") {
         if (id) {

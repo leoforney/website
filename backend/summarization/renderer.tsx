@@ -43,10 +43,37 @@ const professionalExperience = [
 * Integrated Oracle GeoDatabase to surface land data, eliminating dependency on ArcGIS Pro.\
 * Streamlined large-scale policy handling with an RMA-compliant batch import/export system.\
 * Enhanced field productivity with offline map tiles, photo attachments, and note-taking features.\
-* Designed user-friendly interfaces for quoting and claims using jQuery, JSP, and Spring. \
+* Designed user-friendly interfaces for quoting and claims using jQuery, JSP, and Spring.\
 ".split('*').map((bullet) => bullet.trim())
+    },
+    {
+        name: "Software Engineer Intern",
+        company: "Open Systems International",
+        fromDate: "May 2022",
+        toDate: "Jan 2023",
+        summaryPoints: "Engineered a multithreaded Python pipeline using polars to process and interpolate SCADA data from power stations across Spain, achieving a 45% performance improvement for seamless migration into a historian.\
+            * Managed complex PostgreSQL and MongoDB queries for SCADA configurations and data points, ensuring efficient data ingestion and schema validation.\
+            * Integrated an SNMP dashboard into a proprietary OSI display framework, reducing system check intervals from 5 minutes to 5 seconds.\
+            * Developed a standalone SNMP configurator to automate network setup, SCADA point generation, and server configuration.\
+            * Designed a Java Swing installer with intuitive UI/UX, automated deployment, and backend integration via a config file reader/writer.\
+            * Presented projects to 30 project managers, showcasing technical solutions and clear communication.".split('*').map((bullet) => bullet.trim())
+    },
+    {
+        name: "Student Software Developer",
+        company: "Iowa State University",
+        fromDate: "Oct 2019",
+        toDate: "Feb 2022",
+        summaryPoints: "Student developer on university app, MyState.\
+            * Developed key features including library and bus capacity tracking and dynamic dashboard widgets, serving over 10K+ students and faculty.\
+            * Used and integrated RESTful APIs developed by other university developers to integrate features.\
+            * Identified and removed 80% of existing memory leaks in application using LeakCanary.\
+            * Migrated to Kotlin, reducing total lines of code by 17%, improving maintainability and readability.\
+            * Used Firebase Crashlytics daily to identify and fix bugs, ensuring a 95% crash-free rate.\
+            * Integrated dark mode, enhancing user engagement and aligning with modern design trends.".split('*').map((bullet) => bullet.trim())
     }
 ];
+
+console.log(professionalExperience);
 
 const skills = ["JavaScript", "TypeScript", "React", "Angular", "Python", "AWS", "SQL", "GIS"];
 
