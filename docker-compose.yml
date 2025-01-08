@@ -9,7 +9,7 @@ services:
       postgres:
         condition: service_healthy
       queue:
-        condition: service_started
+        condition: service_healthy
     restart: always
     environment:
       DB_HOST: postgres
@@ -37,7 +37,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
     restart: always
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -48,6 +48,11 @@ services:
       - "5672:5672"
       - "15672:15672" # Management UI
     restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "rabbitmq-diagnostics ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   renderer:
     build:
@@ -55,7 +60,7 @@ services:
       dockerfile: Dockerfile
     depends_on:
       queue:
-        condition: service_started
+        condition: service_healthy
       postgres:
         condition: service_healthy
     environment:

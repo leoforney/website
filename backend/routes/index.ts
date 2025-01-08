@@ -5,6 +5,7 @@ import adminRoute from "./admin";
 import {serveStaticFile} from "./static.ts";
 import {vcardRoute} from "./vcard.ts";
 import {serveGeneratedFile} from "./generated.ts";
+import mixerRoute from "./mixer.ts";
 
 export default async function router(req: Request, pool: any) {
     const url = new URL(req.url);
@@ -17,8 +18,8 @@ export default async function router(req: Request, pool: any) {
         return projectsRoute(req, pool);
     } else if (url.pathname.startsWith("/api/topics")) {
         return topicsRoute(req, pool);
-    } else if (url.pathname.startsWith("/api/admin")) {
-        return adminRoute(req, pool);
+    } else if (url.pathname.startsWith("/api/mixer")) {
+        return mixerRoute(req, pool);
     } else if (url.pathname.startsWith("/api/leo.vcf")) {
         return vcardRoute(req);
     } else if (url.pathname.startsWith("/api/generated/")) {

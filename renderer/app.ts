@@ -28,7 +28,7 @@ db.connect().catch((err) => {
 });
 
 // Render page and save <body> content
-async function renderPage(url: string) {
+async function renderPage(url, channel) {
     const browser = await puppeteer.launch({
         headless: "new", // Use the new headless mode
         executablePath: "/usr/bin/chromium-browser",
@@ -41,11 +41,20 @@ async function renderPage(url: string) {
     const bodyContent = await page.evaluate(() => document.body.innerHTML);
     await browser.close();
 
-    // Insert into PostgreSQL
-    await db.query(
-        "INSERT INTO pages (url, body) VALUES ($1, $2)",
+    // Insert into PostgreSQL and get the generated ID
+    const result = await db.query(
+        "INSERT INTO pages (url, body) VALUES ($1, $2) RETURNING id",
         [url, bodyContent]
     );
+    const generatedId = result.rows[0].id;
+
+    // Publish message to "mixingQueue" with the generated ID
+    const message = JSON.stringify({ id: generatedId, url });
+    channel.sendToQueue("mixingQueue", Buffer.from(message), {
+        persistent: true,
+    });
+
+    console.log(`Inserted page with ID ${generatedId} and sent to mixingQueue`);
 }
 
 // Consume messages from RabbitMQ
@@ -53,6 +62,7 @@ async function consumeMessages() {
     const connection = await connect(`amqp://${QUEUE_HOST}:${QUEUE_PORT}`);
     const channel = await connection.createChannel();
     await channel.assertQueue("renderQueue", { durable: true });
+    await channel.assertQueue("mixingQueue", { durable: true });
 
     console.log("Waiting for messages...");
     channel.consume("renderQueue", async (msg) => {
@@ -60,7 +70,7 @@ async function consumeMessages() {
         console.log(`Rendering: ${url}`);
 
         try {
-            await renderPage(url);
+            await renderPage(url, channel);
             channel.ack(msg);
         } catch (error) {
             console.error(`Failed to render ${url}:`, error);

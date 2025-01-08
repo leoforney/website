@@ -6,3 +6,6 @@ Stack:
 - Bun
 - Postgres
 - Docker
+- RabbitMQ
+- Puppeteer
+- React-pdf

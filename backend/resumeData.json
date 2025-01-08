@@ -1,0 +1,79 @@
+{
+  "education": [
+    {
+      "institution": "Iowa State University",
+      "degree": "B.S. Software Engineering",
+      "fromDate": "August 2019",
+      "toDate": "May 2023"
+    }
+  ],
+  "certifications": [
+    {
+      "name": "AWS Associate Developer",
+      "fromDate": "Aug 2024"
+    }
+  ],
+  "professionalExperience": [
+    {
+      "name": "Software Developer",
+      "company": "Quality Consulting Inc.",
+      "fromDate": "June 2023",
+      "toDate": "Present",
+      "summaryPoints": [
+        "Developed a batch PDF generation system using RabbitMQ, saving $18M annually in reinsurance costs.",
+        "Created a custom chart renderer in JavaFX for scalable and efficient coverage chart generation.",
+        "Designed and built a cross-platform claims application with Ionic, Angular, TypeScript, and SQLite, enabling field adjusters to work offline.",
+        "Implemented offline mapping layers in ArcGIS, reducing $700/device annually in licensing costs by replacing ArcGIS Pro dependencies.",
+        "Integrated Oracle GeoDatabase for real-time land data retrieval and streamlined large-scale policy handling using an RMA-compliant batch import/export system.",
+        "Boosted field productivity with offline map tiles, photo attachments, and note-taking features.",
+        "Enhanced user experience by designing modern, user-friendly interfaces for quoting and claims processing, using TypeScript, jQuery, JSP, and Spring."
+      ]
+    },
+    {
+      "name": "Software Engineer Intern",
+      "company": "Open Systems International",
+      "fromDate": "May 2022",
+      "toDate": "Jan 2023",
+      "summaryPoints": [
+        "Engineered a multithreaded Python pipeline using Polars to process and interpolate SCADA data from power stations across Spain, achieving a 45% performance improvement.",
+        "Developed efficient PostgreSQL and MongoDB queries for SCADA configurations, ensuring seamless data ingestion and schema validation.",
+        "Integrated an SNMP dashboard into proprietary OSI frameworks, reducing system check intervals from 5 minutes to 5 seconds.",
+        "Created a standalone SNMP configurator to automate network setup, SCADA point generation, and server configuration.",
+        "Designed a Java Swing installer with automated deployment, backend integration, and intuitive UI/UX.",
+        "Presented technical solutions to 30 project managers, showcasing clear communication and domain expertise."
+      ]
+    },
+    {
+      "name": "Student Software Developer",
+      "company": "Iowa State University",
+      "fromDate": "Oct 2019",
+      "toDate": "Feb 2022",
+      "summaryPoints": [
+        "Worked with Android developers and the iOS team to ensure feature parity on the MyState app.",
+        "Developed key features including library and bus capacity tracking and dynamic dashboard widgets, serving over 10K+ students and faculty.",
+        "Used and integrated RESTful APIs developed by other university developers to integrate features.",
+        "Identified and removed 80% of existing memory leaks in the application using LeakCanary.",
+        "Migrated to Kotlin, reducing total lines of code by 17%, improving maintainability and readability.",
+        "Used Firebase Crashlytics daily to identify and fix bugs, ensuring a 95% crash-free rate.",
+        "Integrated dark mode, enhancing user engagement and aligning with modern design trends."
+      ]
+    }
+  ],
+  "skills": [
+    "Software Engineering",
+    "Full-Stack Web Development",
+    "Cloud Computing (AWS)",
+    "API Development (RESTful)",
+    "Database Design (SQL, NoSQL)",
+    "UI/UX Design",
+    "AI/ML",
+    "GPGPU Programming (CUDA)",
+    "Embedded Systems",
+    "Geospatial Analysis (GIS, ArcGIS)",
+    "Rust",
+    "Java/Kotlin",
+    "Python",
+    "JavaScript/TypeScript",
+    "C++"
+  ]
+}
